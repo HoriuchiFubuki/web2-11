@@ -30,10 +30,34 @@
     scene.add(light);
     scene.add(new THREE.AmbientLight(0x666666));
     
+    var loader = new THREE.TextureLoader();
     var geometry = new THREE.BoxGeometry(1,1,1);
-    var material = new THREE.MeshStandardMaterial({color: 0xccffcc});
+    var material = new THREE.MeshStandardMaterial({
+      color: 0xccffcc,
+      map: loader.load('earth.jpg')
+    });
     var mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
+    
+    var particle_geometry = new THREE.Geometry();
+    var numParticles = 2000;
+    for (var i = 0; i < numParticles ; i++){
+      particle_geometry.vertices.push(
+          new THREE.Vector3(
+            Math.random() * 20 -10,
+            Math.random() * 20 -10,
+            Math.random() * 20 -10));
+    }
+    var particle_material = new THREE.PointsMaterial({
+      size: 0.01,
+      color: 0x80ffccaa,
+      blending: THREE.AdditiveBlending,
+      transparent: true,
+      depthTest: true
+    });
+    
+    var emitter = new THREE.Points(particle_geometry, particle_material);
+    scene.add(emitter);
     
     camera.position.z= 5;
     
